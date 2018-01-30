@@ -1,0 +1,11 @@
+auth:
+  type: config
+  users:
+    tester:
+      password: test
+      roles:
+        - basic
+    admin:
+      password: admin
+      roles:
+        - admin
