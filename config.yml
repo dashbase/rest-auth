@@ -9,3 +9,23 @@ auth:
       password: admin
       roles:
         - admin
+
+server:
+  applicationConnectors:
+       - type: http
+         port: 8080
+  applicationContextPath: /
+  adminContextPath: /admin
+  adminConnectors:
+      - type: http
+        port: 8989
+
+logging:
+  level: INFO
+  appenders:
+      - type: file
+        currentLogFilename: logs/rest-auth.log
+        archive: true
+        archivedLogFilenamePattern: logs/rest-auth-%d.log
+        archivedFileCount: 9
+        timeZone: UTC
