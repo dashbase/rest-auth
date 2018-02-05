@@ -12,13 +12,13 @@ auth:
 
 server:
   applicationConnectors:
-       - type: http
-         port: 8080
+      - type: http
+        port: 18181
   applicationContextPath: /
   adminContextPath: /admin
   adminConnectors:
       - type: http
-        port: 8989
+        port: 18989
 
 logging:
   level: INFO

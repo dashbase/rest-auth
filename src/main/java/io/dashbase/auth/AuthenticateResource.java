@@ -1,6 +1,7 @@
 package io.dashbase.auth;
 
 import io.dropwizard.auth.Auth;
+import org.pac4j.core.profile.UserProfile;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,7 +15,7 @@ public class AuthenticateResource {
 
     @POST
     @Path("validate")
-    public AuthenticatedUser validate(@Auth AuthenticatedUser user) {
-        return user;
+    public UserProfile validate(@Auth AuthenticatedUser user) {
+        return user.getProfile();
     }
 }
