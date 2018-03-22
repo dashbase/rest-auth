@@ -24,6 +24,6 @@ jobs:
                   echo "Build Docker Image"
                   docker build -t dashbase/rest-auth .
                   echo "Push Docker Image"
-                  docker login -u "$DOCKER_USERNAME" -p "DOCKER_PASSWORD"
+                  docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
                   docker push dashbase/rest-auth
               fi
