@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    working_directory: ~/repo
+    
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "pom.xml" }}
+          - v1-dependencies-
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run: mvn clean package
+      - deploy:
+          name: "Build & Deploy Docker Image"
+          command: |
+              if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                  echo "Build Docker Image"
+                  docker build -t dashbase/rest-auth .
+                  echo "Push Docker Image"
+                  docker login -u "$DOCKER_USERNAME" -p "DOCKER_PASSWORD"
+                  docker push dashbase/rest-auth
+              fi
