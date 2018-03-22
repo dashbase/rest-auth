@@ -13,9 +13,15 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthenticateResource {
 
+    @GET
+    @Path("validate")
+    public UserProfile validateGet(@Auth AuthenticatedUser user) {
+        return user.getProfile();
+    }
+
     @POST
     @Path("validate")
-    public UserProfile validate(@Auth AuthenticatedUser user) {
+    public UserProfile validatePost(@Auth AuthenticatedUser user) {
         return user.getProfile();
     }
 }

@@ -13,7 +13,7 @@ public class RestAuthClient {
     public static void main(String[] args) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         RestAuthenticatorFactory restAuthenticatorFactory = new RestAuthenticatorFactory();
-        restAuthenticatorFactory.setUrl("http://localhost:8080/v1/auth/validate");
+        restAuthenticatorFactory.setUrl("http://localhost:18181/v1/auth/validate");
 
         Authenticator<BasicCredentials, AuthenticatedUser> authenticator = restAuthenticatorFactory.authenticator();
 
