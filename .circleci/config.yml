@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    machine: true
+    machine: 
       image: circleci/openjdk:8-jdk
     working_directory: ~/repo
     
