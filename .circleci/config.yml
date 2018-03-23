@@ -6,24 +6,29 @@ jobs:
     
     steps:
       - checkout
-      - run: docker --version
+
+      # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "pom.xml" }}
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run: mvn dependency:go-offline
+
+      - run: gradle dependencies
+
       - save_cache:
           paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run: mvn clean package
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+        
+      # run tests!
+      - run: gradle test
       - deploy:
           name: "Build & Deploy Docker Image"
           command: |
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
                   echo "Build Docker Image"
-                  docker build -t dashbase/rest-auth .
+                  ./gradlew dockerTagLatest
                   echo "Push Docker Image"
-                  docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-                  docker push dashbase/rest-auth
+                  ./gradlew dockerPushLatest
               fi

@@ -1,0 +1,75 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'io.dashbase'
+version = '1.0.0-dev'
+
+description = """Simple Rest Basic Auth Server"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version:'1.2.0'
+    compile group: 'io.dropwizard', name: 'dropwizard-auth', version:'1.2.0'
+    compile group: 'org.pac4j', name: 'pac4j-core', version:'2.1.0'
+    compile group: 'org.pac4j', name: 'pac4j-http', version:'2.1.0'
+    testCompile group: 'junit', name: 'junit', version:'4.5'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.11'
+    }
+}
+
+apply plugin: 'application'
+apply plugin: com.bmuschko.gradle.docker.DockerJavaApplicationPlugin
+
+import com.bmuschko.gradle.docker.tasks.image.DockerTagImage
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
+
+def repo = "dashbase/rest-auth"
+
+mainClassName = 'io.dashbase.auth.RestBasicAuthApplication'
+
+docker {
+    if ("circleci".equals(System.properties['user.name'])) {
+        url = "$System.env.DOCKER_HOST"
+        certPath = new File("$System.env.DOCKER_CERT_PATH")
+    }
+
+    javaApplication {
+        baseImage = 'openjdk:8-jre-alpine'
+        maintainer = 'Dashbase "kevin@dashbase.io"'
+        tag = repo + ":$project.version"
+    }
+
+    // Need to set DOCKERHUB_USERNAME and DOCKERHUB_PASSWORD env vars in order to run dockerPushImage task
+    registryCredentials {
+        username = "$System.env.DOCKERHUB_USERNAME"
+        password = "$System.env.DOCKERHUB_PASSWORD"
+    }
+}
+
+task dockerTagLatest(type: DockerTagImage) {
+    dependsOn dockerBuildImage
+    imageId = dockerBuildImage.getTag()
+    repository = repo
+    tag = "latest"
+}
+
+task dockerPushLatest(type: DockerPushImage) {
+    dependsOn dockerTagLatest
+    imageName = repo + ":latest"
+}
