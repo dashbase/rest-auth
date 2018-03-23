@@ -12,7 +12,7 @@ mvn clean package
 java -jar target/rest-auth-*.jar server config.yml
 ```
 
-go to: http://localhost:8080/v1/auth/validate
+go to: http://localhost:8080/login/basic
 
 and login with credentials here: https://github.com/dashbase/rest-auth/blob/master/config.yml
 
