@@ -24,3 +24,12 @@ hs_err_pid*
 # Build Artifacts
 target
 dependency-reduced-pom.xml
+
+# Gradle
+build/
+out/
+.gradle/
+
+#Intellij
+.idea
+*.iml
