@@ -1,12 +1,9 @@
 version: 2
 jobs:
   build:
-    machine: true
+    docker:
+      - image: circleci/openjdk:8
     working_directory: ~/repo
-
-    environment:
-      TERM: dumb
-      DOCKER_TLS_VERIFY: 0
 
     steps:
       - checkout
@@ -25,11 +22,11 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
         
-      # run tests!
-      - run: ./gradlew test
+      - run: ./gradlew build --no-daemon
       - deploy:
           name: "Build & Deploy Docker Image"
           command: |
+              export PATH=~/.local/bin:$PATH
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
                   echo "Build Docker Image"
                   ./gradlew dockerTagLatest
