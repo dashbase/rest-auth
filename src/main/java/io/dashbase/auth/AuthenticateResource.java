@@ -9,19 +9,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/v1/auth")
+@Path("/login")
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthenticateResource {
 
     @GET
-    @Path("validate")
-    public UserProfile validateGet(@Auth AuthenticatedUser user) {
+    @Path("basic")
+    public UserProfile basicGet(@Auth AuthenticatedUser user) {
         return user.getProfile();
     }
 
     @POST
-    @Path("validate")
-    public UserProfile validatePost(@Auth AuthenticatedUser user) {
+    @Path("basic")
+    public UserProfile basicPost(@Auth AuthenticatedUser user) {
         return user.getProfile();
     }
 }
