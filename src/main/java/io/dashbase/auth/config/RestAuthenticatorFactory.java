@@ -1,24 +1,24 @@
-package io.dashbase.auth;
+package io.dashbase.auth.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.dashbase.auth.AuthenticatedUser;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
-
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.exception.CredentialsException;
 import org.pac4j.core.exception.HttpAction;
-import org.pac4j.http.credentials.authenticator.RestAuthenticator;
 import org.pac4j.core.profile.UserProfile;
+import org.pac4j.http.credentials.authenticator.RestAuthenticator;
 
-import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @JsonTypeName("rest")
-public class RestAuthenticatorFactory implements AuthenticatorFactory {
+public class RestAuthenticatorFactory implements AuthenticatorFactory
+{
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -39,22 +39,23 @@ public class RestAuthenticatorFactory implements AuthenticatorFactory {
 
     @Override
     public Authenticator<BasicCredentials, AuthenticatedUser> authenticator() {
-        return new Authenticator<BasicCredentials, AuthenticatedUser>() {
-            @Override
-            public Optional<AuthenticatedUser> authenticate(BasicCredentials basicCredentials) throws AuthenticationException {
+        return basicCredentials -> {
 
-                UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-                        basicCredentials.getUsername(), basicCredentials.getPassword(), clientId);
+            UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+                    basicCredentials.getUsername(), basicCredentials.getPassword(), clientId);
 
-                try {
-                    restAuthenticator.validate(credentials, null);
-                    UserProfile profile = credentials.getUserProfile();
-                    return Optional.of(new AuthenticatedUser(profile));
-                } catch (HttpAction httpAction) {
-                    throw new AuthenticationException(httpAction);
-                } catch (CredentialsException e) {
-                    return Optional.empty();
+            try {
+                restAuthenticator.validate(credentials, null);
+                UserProfile profile = credentials.getUserProfile();
+                if (profile != null) {
+                  return Optional.of(new AuthenticatedUser(profile));
+                } else {
+                  return Optional.empty();
                 }
+            } catch (HttpAction httpAction) {
+                throw new AuthenticationException(httpAction);
+            } catch (CredentialsException e) {
+                return Optional.empty();
             }
         };
     }

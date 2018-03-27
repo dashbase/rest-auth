@@ -1,25 +1,33 @@
 package io.dashbase.auth;
 
-import org.pac4j.core.profile.CommonProfile;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jersey.repackaged.com.google.common.base.Preconditions;
 import org.pac4j.core.profile.UserProfile;
-import org.pac4j.http.profile.RestProfile;
 
 import java.security.Principal;
+import java.util.Set;
 
-public class AuthenticatedUser implements Principal {
+public class AuthenticatedUser implements Principal
+{
+  @JsonProperty
+  private final String id;
 
-    private final UserProfile profile;
+  @JsonProperty
+  private final Set<String> roles;
 
-    public AuthenticatedUser(UserProfile profile) {
-        this.profile = profile;
-    }
+  public AuthenticatedUser(UserProfile profile) {
+    Preconditions.checkNotNull(profile);
 
-    public UserProfile getProfile() {
-        return profile;
-    }
+    this.id = profile.getId();
+    this.roles = profile.getRoles();
+  }
 
-    @Override
-    public String getName() {
-        return profile.getId();
-    }
+  @Override
+  public String getName() {
+    return id;
+  }
+
+  public Set<String> getRoles() {
+    return roles;
+  }
 }

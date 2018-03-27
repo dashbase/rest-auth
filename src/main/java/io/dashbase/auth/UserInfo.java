@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserInfo {
+public class UserInfo
+{
     @JsonProperty
     @NotNull
     public String password = "";
