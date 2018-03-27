@@ -1,14 +1,17 @@
 auth:
-  type: config
-  users:
-    tester:
-      password: test
-      roles:
-        - basic
-    admin:
-      password: admin
-      roles:
-        - admin
+  type: rest
+  url: "https://your-domain/login/basic"
+
+#  type: config
+#  users:
+#    test:
+#      password: test
+#      roles:
+#        - default
+#    admin:
+#      password: admin
+#      roles:
+#        - admin
 
 server:
   applicationConnectors:

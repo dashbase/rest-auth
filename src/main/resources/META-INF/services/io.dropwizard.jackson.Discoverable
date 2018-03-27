@@ -1,1 +1,1 @@
-io.dashbase.auth.AuthenticatorFactory
+io.dashbase.auth.config.AuthenticatorFactory
