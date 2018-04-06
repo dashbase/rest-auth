@@ -3,7 +3,7 @@
 #### Build
 
 ```
-mvn clean package
+./gradlew clean build
 ```
 
 #### Run
