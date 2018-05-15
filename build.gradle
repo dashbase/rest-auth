@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'idea'
 
 group = 'io.dashbase'
 version = '1.0.0-dev'
@@ -13,9 +14,9 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
-        
-     maven { url "http://repo.maven.apache.org/maven2" }
+    jcenter()
 }
+
 dependencies {
     compile group: 'io.dropwizard', name: 'dropwizard-core', version:'1.2.0'
     compile group: 'io.dropwizard', name: 'dropwizard-auth', version:'1.2.0'
@@ -42,6 +43,17 @@ import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
 def repo = "dashbase/rest-auth"
 
 mainClassName = 'io.dashbase.auth.RestBasicAuthApplication'
+applicationDefaultJvmArgs = ["-Xmx512m",  "-Xms512m"]
+
+dockerCopyDistResources {
+    from 'config.yml'
+    into 'build/docker'
+}
+
+dockerDistTar {
+    addFile("config.yml", "/app/config.yml")
+    defaultCommand("server", "/app/config.yml")
+}
 
 docker {
     if ("circleci".equals(System.properties['user.name'])) {

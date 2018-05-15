@@ -13,19 +13,21 @@ auth:
 server:
   applicationConnectors:
       - type: http
-        port: 18181
+        port: ${PORT:-9478}
   applicationContextPath: /
   adminContextPath: /admin
   adminConnectors:
       - type: http
-        port: 18989
+        port: ${ADMIN_PORT:-8081}
 
 logging:
   level: INFO
   appenders:
       - type: file
-        currentLogFilename: logs/rest-auth.log
+        currentLogFilename: /app/logs/rest-auth.log
         archive: true
-        archivedLogFilenamePattern: logs/rest-auth-%d.log
-        archivedFileCount: 9
+        archivedLogFilenamePattern: /app/logs/rest-auth-%d-%i.log
+        archivedFileCount: 5
         timeZone: UTC
+        maxFileSize: 100MB
+      - type: console
