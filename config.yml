@@ -13,12 +13,12 @@ auth:
 server:
   applicationConnectors:
       - type: http
-        port: ${PORT:-9478}
+        port: ${PORT!9478}
   applicationContextPath: /
   adminContextPath: /admin
   adminConnectors:
       - type: http
-        port: ${ADMIN_PORT:-8081}
+        port: ${ADMIN_PORT!8081}
 
 logging:
   level: INFO
