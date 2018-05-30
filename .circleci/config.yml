@@ -29,8 +29,6 @@ jobs:
           command: |
               export PATH=~/.local/bin:$PATH
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                  echo "Build Docker Image"
-                  ./gradlew dockerTagLatest
-                  echo "Push Docker Image"
+                  echo "Build and Push Docker Image"
                   ./gradlew dockerPushLatest
               fi
