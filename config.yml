@@ -1,14 +1,19 @@
 auth:
+<#if REST_URL?? >
+  type: rest
+  url: ${REST_URL}
+<#else>
   type: config
-  users:
-    tester:
-      password: test
-      roles:
-        - basic
-    admin:
-      password: admin
-      roles:
-        - admin
+#  users:
+#    tester:
+#      password: test
+#      roles:
+#        - basic
+#    admin:
+#      password: admin
+#      roles:
+#        - admin
+</#if>
 
 server:
   applicationConnectors:
