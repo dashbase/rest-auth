@@ -9,7 +9,7 @@
 #### Run
 
 ```
-java -jar target/rest-auth-*.jar server config.yml
+./bin/start.sh config.yml
 ```
 
 go to: http://localhost:8080/login/basic
