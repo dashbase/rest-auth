@@ -1,0 +1,33 @@
+auth:
+  type: config
+  users:
+    tester:
+      password: test
+      roles:
+        - basic
+    admin:
+      password: admin
+      roles:
+        - admin
+
+server:
+  applicationConnectors:
+      - type: http
+        port: 9478
+  applicationContextPath: /
+  adminContextPath: /admin
+  adminConnectors:
+      - type: http
+        port: 9479
+
+logging:
+  level: INFO
+  appenders:
+      - type: file
+        currentLogFilename: ./logs/rest-auth.log
+        archive: true
+        archivedLogFilenamePattern: ./logs/rest-auth-%d-%i.log
+        archivedFileCount: 5
+        timeZone: UTC
+        maxFileSize: 100MB
+      - type: console
